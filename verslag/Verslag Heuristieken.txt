@@ -1,0 +1,42 @@
+Verslag Glasmeesters
+Milou Bisseling
+Belle Bruinsma
+Joeri Fresen
+
+Week 1
+Teams, cases, representatie, state-space
+We hebben deze week gezocht naar bestaande algoritmes die onze case zouden kunnen oplossen. 
+We vonden het gelijksoortige ‘two-dimensional bin packing problem’, het doel bij dit probleem is om een bepaald aantal rechthoeken zo optimaal mogelijk uit een bepaalde oppervlakte te halen met zo min mogelijk verspilling.
+Jylanki (2010) heeft een review geschreven over verschillende algoritmes die het probleem oplossen. 
+In dit paper worden verschillende algoritmes gepresenteerd en vergeleken, daarnaast focust dit paper zich op de variant van het probleem waarbij de rechthoeken geroteerd mogen worden.
+De verschillende algoritmes in dit paper worden gesorteerd in 5 groepen: shelf algorithms, guillotine algorithms, maximal rectangles algorithms en skyline algorithms.
+Aan het eind van het paper wordt geconcludeerd dat de maxrects algorithms het best presteren wanneer packing wordt uitgevoerd met een single bin at a time (BNF).
+
+Week 2
+State-space, eerste algoritme werkend, scorefunctie, background-onderzoek
+
+We hebben deze week het zeeslag concept toegepast op de Glasmeesters Case. 
+Hierbij maken we verschillende zeeen (glasplaten) aan, waarin we zoveel mogelijk boten (glasplaten) stoppen. 
+De zee (glasplaat) bestaat in eerste in instantie uit nullen.
+Wanneer de ruimte gevuld wordt met een boot (glasplaat), wordt het desbetreffende cijfer veranderd in een 1, dit geeft aan dat de ruimte bezet is.
+Met deze methode vinden we een manier om het probleem visueel weer te geven, maar in de werkgroep deze week wordt opgemerkt dat we geen grenzen van de glasplaten kunnen zien met deze methode.
+In het geval van een glasplaten fabriek is het belangrijk om deze grenzen te tekenen anders zien de snijders niet waar ze de glasplaten moeten snijden.
+Naast het nadeel in de visualisatie van deze methode blijkt het ook gecompliceerd te worden om een algoritme toe te voegen op deze manier.
+Daarom besluiten we na deze methode op zoek te gaan naar een nieuwe methode om onze case op te lossen.
+Bij de techintervisie afspraak wordt ons aangeraden om classes aan te maken voor elke glasplaat en we vinden dan ook een overeenkomend voorbeeld op google.
+In dit voorbeeld wordt gebruik gemaakt van de numpy en de pandas library, hieraan willen we classes toe gaan voegen zodat we in de classes een array van bestellingen kunnen toevoegen.
+
+
+Week 3
+Eerste volwaardige algoritme werkend, varianten uit programmeren
+Na de literatuur beter bestudeerd te hebben, vinden we op GitHub de restpack library. 
+Dit is een collectie van heuristische algoritmes die het 2D bin parking problem oplossen. 
+Het programma zorgt ervoor de een pakket van rechthoeken (glasplaten) uit zo min mogelijk platen (glasplaten) wordt gehaald.
+Het programma maakt in zijn default instelling gebruik van het MAXRECTS algoritme wat volgens het paper van Jylanki optimaal is.
+Daarnaast selecteer het in de default mode met BFF (Bin First Fit), hij stopt de rechthoek in de eerste plaat waar het past.
+De rechthoeken worden gesorteerd voor het selecteren van een plaats op grootte (lengte x breedte).
+Als laatste is het mogelijk om de rechthoeken te draaien.
+
+
+Week 4 
+Beginnen met schrijven, algoritmes volledig werkend, (visualisatie)

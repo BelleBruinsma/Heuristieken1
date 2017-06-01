@@ -1,4 +1,3 @@
-
 import sys
 from combination_check import *
 sys.setrecursionlimit(100000)
@@ -7,48 +6,43 @@ sys.setrecursionlimit(100000)
 area_list = []
 start_id = 0
 final_item_list = []
-threshold = 2710
-min_percentage = 95
+threshold = 2600
+min_percentage = 90
+# threshold = 2720
+# min_percentage = 95
 min_value = (threshold/100) * min_percentage
 final_total_areas = []
+bliep = 0
 
-# order_list = [[150, 150], [50, 110], [160, 270], [130, 270], [130, 130], [190, 160], [200, 190], [170, 240],
-# [110, 220], [110, 140], [70, 230], [140, 170], [160, 240], [200, 130], [150, 100], [190, 220], [60, 150], [40, 240]]
 
-order_list = [[34, 18, 1], [33, 14, 1], [32, 10, 1], [30, 19, 1], [29, 12, 1], [29, 11, 1], [27, 19, 1], [27, 11, 1],
-              [25, 17, 1], [22, 11, 1], [22, 7, 1], [20, 10, 1], [18, 17, 1], [17, 12, 1], [16, 12, 1], [16, 9, 1],
-              [16, 9, 1], [13, 4, 1], [12, 9, 1], [10, 9, 1]]
+def initialize(order_list, sort="y"):
+    # calculate and add area to order list
+    stack = [[w, w[0] * w[1]] for w in order_list]
+    areas = [order[1] for order in stack]
+    total_area_to_fill = sum(areas)
 
-# order_list = [[1, 10], [4, 50], [2, 50], [1, 50], [3, 50], [1, 25], [5, 50]]
+    # sort the order list by height
+    if sort == "y":
+        stack = sorted(stack, key=get_key, reverse=True)
 
-# calculate and add area to order list
-stack = [[w, w[0] * w[1]] for w in order_list]
-areas = [order[1] for order in stack]
-total_area_to_fill = sum(areas)
-
-print(total_area_to_fill)
+    # create starting node and add itself to used nodes
+    start = Node(start_id, stack.pop(0))
+    start.add_used_node(start)
+    return start, stack, total_area_to_fill
 
 
 # key generator based in height for sorting
 def get_key(item):
     return item[1]
 
-# sort the order list by height
-stack = sorted(stack, key=get_key, reverse=True)
-print(stack)
-
-# create starting node and add itself to used nodes
-start = Node(start_id, stack.pop(0))
-start.add_used_node(start)
-
 
 # recursive function that searches for combination of areas where no more rectangle can be added without exceeding
 # the area of the used bins
 def find_combination(current, orders, node_id, checked="n"):
+    global bliep
+    global min_value
     # will be run at the first iteration of the function
     if not checked == "y":
-        print("orders:")
-        print(orders)
         # adds remaining orders as children to starting node
         for order_nr in range(len(orders)):
             current.add_child(Node(node_id, orders[order_nr]))
@@ -73,7 +67,6 @@ def find_combination(current, orders, node_id, checked="n"):
     # if fully backtracked to starting node with no more children to check, no feasible combo was found
     elif not current.parent and not current.children:
             print("No combo was found")
-            print(final_total_areas)
             return False
 
     # iterate over children to find possible addition of rectangle without exceeding maximum area
@@ -112,69 +105,66 @@ def find_combination(current, orders, node_id, checked="n"):
                 child = child.parent
             values.append(child.values)
             attempt_list = make_list(values)
-            for attempt in attempt_list:
-                test_plate = Plate(60, 50, 1)
-                h = try_combo(attempt, test_plate)
-                if h:
-                    total = 0
-                    for cur in attempt:
-                        total += cur[0]*cur[1]
-                    if total >= min_value:
-                        print()
-                        print(test_plate.state)
-                        print total
+            total = 0
+            for cur in attempt_list[0]:
+                total += cur[0] * cur[1]
+            if total >= min_value:
+                for attempt in attempt_list:
+                    test_plate = Plate(50, 60, 1)
+                    h = try_combo(attempt, test_plate)
+                    if h:
                         return True, h[1]
             # if combination didn't work, backtrack and remove last checked node from children
-            print("onto the next one")
+            bliep += 1
+            print(bliep)
             temp_id = current.id
             current.parent.add_used_node(current)
-            current = current.parent
-            current.remove_child(temp_id)
-            return find_combination(current, orders, node_id, "y")
+            new = current.parent
+            new.remove_child(temp_id)
+            del current
+            return find_combination(new, orders, node_id, "y")
 
 
-x = find_combination(start, stack, start_id)
+def prepare(old_list, x):
+    if len(old_list[0]) == 3:
+        old_list = [order[:-1] for order in old_list]
+    for iets in x[1]:
+        if iets in old_list:
+            old_list.remove(iets)
+        iets[0], iets[1] = iets[1], iets[0]
+        if iets in old_list:
+            old_list.remove(iets)
+    return old_list
 
-print x[1]
+# start_stuff = initialize(order_list, "n")
+# x = find_combination(start_stuff[0], start_stuff[1], start_id)
+# order_list = prepare(order_list, x)
+# print(order_list)
+# start_stuff = initialize(order_list)
+# x = find_combination(start_stuff[0], start_stuff[1], start_id)
+# order_list = prepare(order_list, x)
+# print(order_list)
+# start_stuff = initialize(order_list)
 
-order_list = [order[:-1] for order in order_list]
 
-for iets in x[1]:
-    if iets in order_list:
-        order_list.remove(iets)
-    iets[0], iets[1] = iets[1], iets[0]
-    if iets in order_list:
-        order_list.remove(iets)
 
-print order_list
+# stack = sorted(stack, key=get_key, reverse=True)
+#
+# # create starting node and add itself to used nodes
+# start = Node(start_id, stack.pop(0))
+# start.add_used_node(start)
+#
+# #x = find_combination(start, stack, start_id)
+#
+# print(x[1])
+#
+# for iets in x[1]:
+#     if iets in order_list:
+#         order_list.remove(iets)
+#     iets[0], iets[1] = iets[1], iets[0]
+#     if iets in order_list:
+#         order_list.remove(iets)
+#
+# print(order_list)
 
-stack = [[w, w[0] * w[1]] for w in order_list]
-areas = [order[1] for order in stack]
-total_area_to_fill = [sum(areas)]
-
-print(total_area_to_fill)
-
-stack = sorted(stack, key=get_key, reverse=True)
-
-# create starting node and add itself to used nodes
-start = Node(start_id, stack.pop(0))
-start.add_used_node(start)
-
-x = find_combination(start, stack, start_id)
-
-print x[1]
-
-for iets in x[1]:
-    if iets in order_list:
-        order_list.remove(iets)
-    iets[0], iets[1] = iets[1], iets[0]
-    if iets in order_list:
-        order_list.remove(iets)
-
-print order_list
-
-stack = [[w, w[0] * w[1]] for w in order_list]
-areas = [order[1] for order in stack]
-total_area_to_fill.append(sum(areas))
-
-print(total_area_to_fill)
+#x = find_combination(start, stack, start_id)

@@ -2,7 +2,6 @@ import itertools
 from classes import *
 
 
-# for combo in lst:
 def make_list(values):
     values.reverse()
     attempt_list = [list(i) for i in itertools.product([0, 1], repeat=len(values))]
@@ -43,7 +42,6 @@ def try_combo(combo, plate):
                     return False
                 break
             elif new_opt == plate.opt_cord[-1]:
-                print("Nope :'(")
+                #print("Nope :'(")
                 return False
-    print(combo)
     return True, combo

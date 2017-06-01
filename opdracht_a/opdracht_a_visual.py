@@ -91,6 +91,7 @@ for i in pos:
                 (xas,yas),
                 width,
                 height,
+		edgecolor="black"
             )
         )
     elif i[0] == 1:
@@ -103,6 +104,7 @@ for i in pos:
                 (xas, yas),
                 width,
                 height,
+		edgecolor="black"
             )
         )
     else:
@@ -115,6 +117,7 @@ for i in pos:
                 (xas, yas),
                 width,
                 height,
+		edgecolor="black"
             )
         )
 

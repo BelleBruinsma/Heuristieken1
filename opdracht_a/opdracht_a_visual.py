@@ -1,35 +1,6 @@
 from rectpack import newPacker
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import atexit
-from time import clock
-
-def secondsToStr(t):
-    return "%d:%02d:%02d.%03d" % \
-        reduce(lambda ll,b : divmod(ll[0],b) + ll[1:],
-            [(t*1000,),1000,60,60])
-
-line = "="*40
-def log(s, elapsed=None):
-    print line
-    print secondsToStr(clock()), '-', s
-    if elapsed:
-        print "Elapsed time:", elapsed
-    print line
-    print
-
-def endlog():
-    end = clock()
-    elapsed = end-start
-    log("End Program", secondsToStr(elapsed))
-
-def now():
-    return secondsToStr(clock())
-
-start = clock()
-atexit.register(endlog)
-log("Start Program")
-
 
 rectangles = [(190, 270), (90, 160), (120, 290), (110, 220), (160, 120), (90, 120), (200, 100), \
 (110, 290), (120, 170), (100, 320), (90, 160), (190, 300), (170, 250), (180, 340), (170, 180), (90, 100), (110, 270), (70, 220), (40, 130), (140, 330), (130, 110), (40, 240)]
